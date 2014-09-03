@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+// app.use('/', routes);
 app.use('/users', users);
 
 /// catch 404 and forward to error handler
@@ -47,6 +47,29 @@ if (app.get('env') === 'development') {
         });
     });
 }
+
+var todos = [
+    {
+        description: "Buy eggs",
+        due: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // 1 day from now
+        done: false
+    },
+    {
+        description: "Write next blog post",
+        due: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
+        done: false
+    },
+    {
+        description: "Build todo list app",
+        due: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
+        done: true
+    }
+];
+
+app.get('/', routes.index(todos));
+// app.get('/users', user.list);
+
+app.post('/todo.json', routes.addTodo(todos));
 
 // production error handler
 // no stacktraces leaked to user
